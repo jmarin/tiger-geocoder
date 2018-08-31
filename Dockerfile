@@ -16,10 +16,10 @@ COPY src/ src/
 RUN cargo build --release
 
 # Create Docker image, copying output from builder image
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
+FROM scratch
+#RUN apk --no-cache add ca-certificates
 COPY --from=builder \
   /home/rust/src/target/x86_64-unknown-linux-musl/release/geocode \
-  /usr/local/bin/
-CMD /usr/local/bin/geocode
+  /
+ENTRYPOINT ["/geocode"]
 
