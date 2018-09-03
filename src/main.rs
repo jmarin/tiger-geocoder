@@ -10,8 +10,6 @@ use std::env;
 use structopt::StructOpt;
 
 use prettytable::Table;
-use prettytable::row::Row;
-use prettytable::cell::Cell;
 
 mod tiger;
 use tiger::get_connection;
@@ -33,10 +31,10 @@ fn main() {
             let address = opt.address;
             let connection = get_connection(url);
             match connection {
-                Ok(conn) => {//println!("{:#?}", tiger::geocode(&conn, address).unwrap()),
-					let geocoded = tiger::geocode(&conn, address).unwrap();
-					display_geocoded(&geocoded);
-				},
+                Ok(conn) => {
+                    let geocoded = tiger::geocode(&conn, address).unwrap();
+                    display_geocoded(&geocoded);
+                }
                 Err(e) => println!("{:#?}", e),
             }
         }
@@ -45,10 +43,30 @@ fn main() {
 }
 
 fn display_geocoded(geocoded: &Vec<GeocodedAddress>) {
-  	let mut table = Table::new();
-    table.add_row(row!["rating", "lon", "lat", "street_number", "street", "street_type", "city", "state", "zip_code"]);	
+    let mut table = Table::new();
+    table.add_row(row![
+        "rating",
+        "lon",
+        "lat",
+        "street_number",
+        "street",
+        "street_type",
+        "city",
+        "state",
+        "zip_code"
+    ]);
     for g in geocoded {
-      table.add_row(row![g.rating, g.lon, g.lat, g.street_number, g.street, g.street_type, g.city, g.state, g.zip_code]);    
+        table.add_row(row![
+            g.rating,
+            g.lon,
+            g.lat,
+            g.street_number,
+            g.street,
+            g.street_type,
+            g.city,
+            g.state,
+            g.zip_code
+        ]);
     }
-	table.printstd();	        
+    table.printstd();
 }
