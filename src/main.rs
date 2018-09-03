@@ -25,7 +25,7 @@ fn main() {
             let address = opt.address;
             let connection = get_connection(url);
             match connection {
-                Ok(conn) => println!("{}", address),
+                Ok(conn) => println!("{:#?}", tiger::geocode(address).unwrap()),
                 Err(e) => println!("{:#?}", e),
             }
         }

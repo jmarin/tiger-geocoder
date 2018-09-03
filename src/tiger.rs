@@ -8,6 +8,7 @@ use self::postgres::{Connection, TlsMode};
 use std::error;
 use std::fmt;
 
+#[derive(Debug)]
 pub struct GeocodedAddress {
     rating: u8,
     lon: f64,
@@ -39,7 +40,7 @@ impl error::Error for GeocodeError {
     }
 }
 
-pub fn geocode(address: &str) -> Result<GeocodedAddress, GeocodeError> {
+pub fn geocode(address: String) -> Result<GeocodedAddress, GeocodeError> {
     Ok(GeocodedAddress {
         rating: 1,
         lon: -77.0590732421937,
