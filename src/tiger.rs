@@ -10,15 +10,15 @@ use std::fmt;
 
 #[derive(Debug)]
 pub struct GeocodedAddress {
-    rating: i32,
-    lon: f64,
-    lat: f64,
-    street_number: i32,
-    street: String,
-    street_type: String,
-    city: String,
-    state: String,
-    zip_code: String,
+    pub rating: i32,
+    pub lon: f64,
+    pub lat: f64,
+    pub street_number: i32,
+    pub street: String,
+    pub street_type: String,
+    pub city: String,
+    pub state: String,
+    pub zip_code: String,
 }
 
 #[derive(Debug)]
