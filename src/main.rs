@@ -25,10 +25,9 @@ fn main() {
             let address = opt.address;
             let connection = get_connection(url);
             match connection {
-                Ok(conn) => println!("Connection successful!"),
+                Ok(conn) => println!("{}", address),
                 Err(e) => println!("{:#?}", e),
             }
-            println!("{:#?}", address);
         }
         Err(_) => println!("{:#?}", GeocodeError),
     }
