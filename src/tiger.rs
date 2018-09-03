@@ -10,7 +10,7 @@ use std::fmt;
 
 #[derive(Debug)]
 pub struct GeocodedAddress {
-    rating: u8,
+    rating: i32,
     lon: f64,
     lat: f64,
     street_number: i32,
@@ -40,18 +40,40 @@ impl error::Error for GeocodeError {
     }
 }
 
-pub fn geocode(address: String) -> Result<GeocodedAddress, GeocodeError> {
-    Ok(GeocodedAddress {
-        rating: 1,
-        lon: -77.0590732421937,
-        lat: 38.9072140041614,
-        street_number: 1311,
-        street: String::from("30th"),
-        street_type: String::from("St"),
-        city: String::from("Washington"),
-        state: String::from("DC"),
-        zip_code: String::from("20007"),
-    })
+pub fn geocode(
+    connection: &Connection,
+    address: String,
+) -> Result<Vec<GeocodedAddress>, GeocodeError> {
+    let sql = format!(
+        "SELECT g.rating, ST_X(g.geomout) As lon, ST_Y(g.geomout) As lat,
+(addy).address As street_number, (addy).streetname As street,
+(addy).streettypeabbrev As street_type, (addy).location As
+city, (addy).stateabbrev As st,(addy).zip
+FROM geocode('{}') As g;",
+        address
+    );
+
+    let mut geocoded_addresses: Vec<GeocodedAddress> = vec![];
+
+    for row in connection.query(&sql, &[]).unwrap().iter() {
+        let geocoded = GeocodedAddress {
+            rating: row.get(0),
+            lon: row.get(1),
+            lat: row.get(2),
+            street_number: row.get(3),
+            street: row.get(4),
+            street_type: row.get(5),
+            city: row.get(6),
+            state: row.get(7),
+            zip_code: row.get(8),
+        };
+        geocoded_addresses.push(geocoded);
+    }
+
+    match geocoded_addresses.len() {
+        0 => Err(GeocodeError),
+        _ => Ok(geocoded_addresses),
+    }
 }
 
 pub fn get_connection(url: String) -> Result<Connection, Error> {
