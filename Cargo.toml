@@ -7,3 +7,6 @@ authors = ["Juan Marin Otero <juan.marin.otero@gmail.com>"]
 structopt = "0.2"
 diesel = { version = "1.3.2", features = ["postgres"] }
 dotenv = "0.13"
+r2d2 = "0.8"
+r2d2_postgres = "0.14"
+postgres = "0.15"

@@ -6,6 +6,10 @@ use dotenv::dotenv;
 use std::env;
 use structopt::StructOpt;
 
+mod tiger;
+use tiger::get_connection;
+use tiger::GeocodeError;
+
 #[derive(StructOpt, Debug)]
 #[structopt(name = "address")]
 struct Opt {
@@ -19,8 +23,13 @@ fn main() {
         Ok(url) => {
             let opt = Opt::from_args();
             let address = opt.address;
+            let connection = get_connection(url);
+            match connection {
+                Ok(conn) => println!("Connection successful!"),
+                Err(e) => println!("{:#?}", e),
+            }
             println!("{:#?}", address);
         }
-        Err(_) => println!("Please provide connection in POSTGRES_URL environment variable"),
+        Err(_) => println!("{:#?}", GeocodeError),
     }
 }
