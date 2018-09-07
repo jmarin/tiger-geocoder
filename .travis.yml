@@ -13,8 +13,12 @@ cache: cargo
 script: 
   - cargo build
 
-services:
-  - postgresql
+addons:
+  postgresql: 9.6
+  apt:
+    packages:
+    - postgresql-9.6-postgis-2.3
 
 before_script:
   - psql -c 'create database geocoder;' -U postgres
+  - psql -c "create extension postgis" -U postgres geocoder
