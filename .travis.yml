@@ -12,3 +12,9 @@ cache: cargo
 
 script: 
   - cargo build
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database geocoder;' -U postgres
