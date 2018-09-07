@@ -8,6 +8,9 @@ matrix:
     - rust: nightly
   fast_finish: true
 
+services:
+  - postgresql
+
 addons:
   postgresql: 10
   apt:
@@ -15,7 +18,7 @@ addons:
     - postgresql-10-postgis-2.4
 
 before_script:
-  - psql -h localhost -U postgres -c "create extension postgis"
+  - psql -U postgres -c "create extension postgis;"
 #  - psql -U postgres -c "create extension fuzzystrmatch"
 #  - psql -U postgres -c "create extension tiger_geocoder"
 #  - psql -U postgres -c "create extension address_standardizer"
