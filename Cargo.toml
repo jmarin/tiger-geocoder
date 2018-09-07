@@ -1,6 +1,6 @@
 [package]
 name = "geocode"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Juan Marin Otero <juan.marin.otero@gmail.com>"]
 
 [dependencies]
