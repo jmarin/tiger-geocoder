@@ -16,4 +16,9 @@ addons:
 
 before_script:
   - psql -U postgres -c "create extension postgis"
+  - psql -U postgres -c "create extension fuzzystrmatch"
+  - psql -U postgres -c "create extension tiger_geocoder"
+  - psql -U postgres -c "create extension address_standardizer"
   - psql -U postgres -c "create database geocoder"
+  - psql -U postgres -c "SELECT na.address, na.streetname,na.streettypeabbrev, na.zip FROM normalize_address('1 Devonshire Place, Boston, MA 02109') AS na"
+  - psql -U postgres -c "UPDATE tiger.loader_lookuptables SET load = true WHERE load = false AND lookup_name IN('tract', 'bg', 'tabblock')"
