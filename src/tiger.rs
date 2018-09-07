@@ -56,16 +56,26 @@ FROM geocode('{}') As g;",
     let mut geocoded_addresses: Vec<GeocodedAddress> = vec![];
 
     for row in connection.query(&sql, &[]).unwrap().iter() {
+            let rating:Option<i32>  = row.get(0);
+            let longitude:Option<f64> = row.get(1);
+            let latitude:Option<f64> = row.get(2);
+            let street_number:Option<i32> =  row.get(3);
+            let street:Option<String> = row.get(4);
+            let street_type:Option<String> = row.get(5);
+            let city:Option<String> =  row.get(6);
+            let state:Option<String> = row.get(7);
+            let zip_code:Option<String> =  row.get(8);
+
         let geocoded = GeocodedAddress {
-            rating: row.get(0),
-            lon: row.get(1),
-            lat: row.get(2),
-            street_number: row.get(3),
-            street: row.get(4),
-            street_type: row.get(5),
-            city: row.get(6),
-            state: row.get(7),
-            zip_code: row.get(8),
+            rating: rating.unwrap_or_default(),
+            lon: longitude.unwrap_or_default(),
+            lat: latitude.unwrap_or_default(),
+            street_number: street_number.unwrap_or_default(),
+            street: street.unwrap_or_default(),
+            street_type: street_type.unwrap_or_default(),
+            city: city.unwrap_or_default(),
+            state: state.unwrap_or_default(),
+            zip_code: zip_code.unwrap_or_default()
         };
         geocoded_addresses.push(geocoded);
     }
