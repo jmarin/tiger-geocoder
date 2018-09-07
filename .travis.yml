@@ -23,4 +23,4 @@ before_script:
   - psql -c 'create database geocoder;' -U postgres
   - psql -c "create extension postgis" -U postgres geocoder
   - psql -c "create extension fuzzystrmatch" -U postgres geocoder
-  - psql -c "create extension tiger_geocoder" -U postgres geocoder
+  - psql -c "create extension postgis_tiger_geocoder" -U postgres geocoder
