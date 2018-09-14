@@ -13,6 +13,7 @@ pub struct GeocodedAddress {
     pub rating: i32,
     pub lon: f64,
     pub lat: f64,
+    pub srid: i32,
     pub street_number: i32,
     pub street: String,
     pub street_type: String,
@@ -46,7 +47,7 @@ pub fn geocode(
 ) -> Result<Vec<GeocodedAddress>, GeocodeError> {
     let sql = format!(
         "SELECT g.rating, ST_X(g.geomout) As lon, ST_Y(g.geomout) As lat,
-(addy).address As street_number, (addy).streetname As street,
+        ST_SRID(g.geomout) as srid, (addy).address As street_number, (addy).streetname As street,
 (addy).streettypeabbrev As street_type, (addy).location As
 city, (addy).stateabbrev As st,(addy).zip
 FROM geocode('{}') As g;",
@@ -56,26 +57,28 @@ FROM geocode('{}') As g;",
     let mut geocoded_addresses: Vec<GeocodedAddress> = vec![];
 
     for row in connection.query(&sql, &[]).unwrap().iter() {
-            let rating:Option<i32>  = row.get(0);
-            let longitude:Option<f64> = row.get(1);
-            let latitude:Option<f64> = row.get(2);
-            let street_number:Option<i32> =  row.get(3);
-            let street:Option<String> = row.get(4);
-            let street_type:Option<String> = row.get(5);
-            let city:Option<String> =  row.get(6);
-            let state:Option<String> = row.get(7);
-            let zip_code:Option<String> =  row.get(8);
+        let rating: Option<i32> = row.get(0);
+        let longitude: Option<f64> = row.get(1);
+        let latitude: Option<f64> = row.get(2);
+        let srid: Option<i32> = row.get(3);
+        let street_number: Option<i32> = row.get(4);
+        let street: Option<String> = row.get(5);
+        let street_type: Option<String> = row.get(6);
+        let city: Option<String> = row.get(7);
+        let state: Option<String> = row.get(8);
+        let zip_code: Option<String> = row.get(9);
 
         let geocoded = GeocodedAddress {
             rating: rating.unwrap_or_default(),
             lon: longitude.unwrap_or_default(),
             lat: latitude.unwrap_or_default(),
+            srid: srid.unwrap_or_default(),
             street_number: street_number.unwrap_or_default(),
             street: street.unwrap_or_default(),
             street_type: street_type.unwrap_or_default(),
             city: city.unwrap_or_default(),
             state: state.unwrap_or_default(),
-            zip_code: zip_code.unwrap_or_default()
+            zip_code: zip_code.unwrap_or_default(),
         };
         geocoded_addresses.push(geocoded);
     }
